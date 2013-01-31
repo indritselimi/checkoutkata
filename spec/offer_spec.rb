@@ -68,8 +68,8 @@ module CheckoutKata
     describe BuyMorePayLess do
       let(:item) { Items::FR1 }
       let(:another_item) { Items::CF1 }
-      let(:discount) { -0.5 }
-      let(:offer) { BuyMorePayLess.new(item, 2, discount) }
+      let(:discount) { 0.5 }
+      let(:offer) { BuyMorePayLess.new(item: item, quantity: 2, discount: discount) }
 
       context '.apply' do
         it_behaves_like "AnyOffer"
@@ -84,7 +84,7 @@ module CheckoutKata
         end
 
         it "a correction that contains a fixed discount for each specific item" do
-          offer.apply([item, item, another_item]).first.price.should == discount
+          offer.apply([item, item, another_item]).map(&:price).inject(0, :+).should == -discount * 2
         end
       end
     end

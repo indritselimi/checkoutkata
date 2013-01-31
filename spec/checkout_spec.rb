@@ -41,6 +41,46 @@ module CheckoutKata
 
         checkout.total.should == inventory[:FR1].price
       end
+
+      it 'applies all offers present' do
+        checkout = Checkout.new(inventory, [Offer::PayOneForTwo.new(Items::FR1),
+                                            Offer::BuyMorePayLess.new(item: Items::SR1, quantity: 3, discount: 0.5)])
+
+        2.times { checkout.scan :FR1 }
+        4.times { checkout.scan :SR1 }
+
+        checkout.total.should == inventory[:FR1].price + 4 * inventory[:SR1].price - 4 * 0.5
+      end
+
+      it 'is zero when not items are present in the basket' do
+         checkout.total.should == 0
+      end
+    end
+
+    context 'Acceptance Tests' do
+      let(:checkout) do
+        Checkout.new(inventory,
+          [Offer::PayOneForTwo.new(Items::FR1),
+          Offer::BuyMorePayLess.new(item: Items::SR1, quantity: 3, discount: 0.5)])
+      end
+
+      it 'passes the first test example' do
+        [:FR1, :SR1, :FR1, :CF1].each { |i| checkout.scan i}
+
+        checkout.total.should == 19.34
+      end
+
+      it 'passes the second test example' do
+        [:FR1, :FR1].each { |i| checkout.scan i}
+
+        checkout.total.should == 3.11
+      end
+
+      it 'passes the third test example' do
+        [:SR1, :SR1, :FR1, :SR1].each { |i| checkout.scan i}
+
+        checkout.total.should == 16.61
+      end
     end
   end
 end

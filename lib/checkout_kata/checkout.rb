@@ -17,7 +17,7 @@ module CheckoutKata
     end
 
     def total
-      (@items + offer_items).collect(&:price).inject(&:+)
+      (@items + offer_items).collect(&:price).inject(0, &:+)
     end
 
     ItemNotRecognized = Class.new ArgumentError

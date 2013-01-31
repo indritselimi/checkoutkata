@@ -1,4 +1,4 @@
-require '/Users/iselimi/dev/checkout_kata/lib/checkout_kata/offer.rb' # TODO remove me
+require 'checkout_kata/offer'
 
 module CheckoutKata
 

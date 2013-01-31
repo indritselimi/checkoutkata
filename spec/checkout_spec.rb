@@ -35,7 +35,7 @@ module CheckoutKata
       end
 
       it 'applies offers if any' do
-        checkout = Checkout.new(inventory, [Offer::PayOneForTwo.new(:FR1)])
+        checkout = Checkout.new(inventory, [Offer::PayOneForTwo.new(Items::FR1)])
 
         2.times { checkout.scan :FR1 }
 
